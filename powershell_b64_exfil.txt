@@ -7,8 +7,8 @@ powershell $enc='GMAaQBmAGkAYwAgAEQATgBTACAAUwB1AGYAZgBpAHgAIAAgAC4AIAA6ACAAIgAN
 
 ###Dump Files RAW b64
 #Get file contents
-powershell $cmd=(Get-Content "hashcat32.bin");$b=[System.Text.Encoding]::Unicode.GetBytes($cmd);$out =[Convert]::ToBase64String($b);Write-Host $out
+powershell $raw = Get-Content -Path sam.hive -Encoding Byte;$b64 = [System.Convert]::ToBase64String($raw);$b64 | Out-File sam.b64
 
 #Dump file contents
-powershell $enc='IAIAAgACAAQwBvAG4AbgBlAGMAdABpAG8AbgAtAHMAcABlAGMAaQBmAGkAYwAgAEQATgBTACAAUwB1AGYAZgBpAHgAIAAgAC4AIAA6ACAAIgANAAoAXQA=';$dec=[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($enc));($dec | Out-File "loot.exe")
+powershell $b64 = "baer==";$raw = [System.Convert]::FromBase64String($b64);Set-Content -Path output.exe -Value $raw -Encoding Byte
 
