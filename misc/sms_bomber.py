@@ -25,7 +25,7 @@ parser = argparse.ArgumentParser(description="PoC SMS Bomber")
 parser.add_argument('-s', '--sender', dest='sender', help='Sender email address', required=True)
 parser.add_argument('-t', '--target', dest='target', help='Target cellphone number (10-digits)', required=True)
 parser.add_argument('-c', '--carrier', dest='carrier', help='Target cellphone carrier', choices=['att','tmobile','sprint' \
-			'virgin', 'tracfone', 'metropcs', 'cricket','ptel','republic','suncom','ting','uscc','cingular','cspire','pageplus'], required=True)
+			'virgin', 'tracfone', 'metropcs', 'cricket','ptel','republic','suncom','ting','uscc','cingular','cspire','verizon'], required=True)
 parser.add_argument('-n', '--number', dest='number', help='Number of messages', type=int, required=True)
 parser.add_argument('-m', '--message', dest='message', help='Message (optional - if blank random data is sent', required=False)
 
