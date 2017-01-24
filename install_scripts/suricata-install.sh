@@ -32,8 +32,8 @@ echo "url = $ETURL" >> /etc/oinkmaster.conf
 mkdir /etc/suricata/rules
 cd /etc
 oinkmaster -C /etc/oinkmaster.conf -o /etc/suricata/rules
-sed -i 's/\/etc\/suricata\/classification\.config/\/etc\/suricata\/rules\/classification\.config' /etc/suricata/suricata.yaml
-sed -i 's/\/etc\/suricata\/reference\.config/\/etc\/suricata\/rules\/reference\.config' /etc/suricata/suricata.yaml
+sed -i 's/\/etc\/suricata\/classification\.config/\/etc\/suricata\/rules\/classification\.config/g' /etc/suricata/suricata.yaml
+sed -i 's/\/etc\/suricata\/reference\.config/\/etc\/suricata\/rules\/reference\.config/g' /etc/suricata/suricata.yaml
 
 #cronjob to update rules daily @ 2:30 AM
 export CRONTAB_NOHEADER=N
