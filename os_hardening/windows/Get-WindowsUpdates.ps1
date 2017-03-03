@@ -18,7 +18,7 @@
         When present will allow the script to download and install all updates that are
         currently available.
     .EXAMPLE
-        .\Get-WindowsUpdates.ps1
+        .\Get-WindowsUpdates.ps1 -Install
         
         There are no applicable updates
         
