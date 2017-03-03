@@ -1,0 +1,18 @@
+#trust = 14.04
+#precides = 12.04
+
+deb http://archive.ubuntu.com/ubuntu/ trusty main restricted universe multiverse
+# deb-src http://archive.ubuntu.com/ubuntu/ precise main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ trusty-updates main restricted universe multiverse
+# deb-src http://archive.ubuntu.com/ubuntu/ precise-updates main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse
+# deb-src http://archive.ubuntu.com/ubuntu/ precise-backports main restricted universe multiverse
+# deb http://archive.ubuntu.com/ubuntu/ trusty-proposed main restricted universe multiverse
+# deb-src http://archive.ubuntu.com/ubuntu/ precise-proposed main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
+# deb-src http://security.ubuntu.com/ubuntu precise-security main restricted universe multiverse
+
+deb http://archive.canonical.com/ubuntu trusty partner
+# deb-src http://archive.canonical.com/ubuntu precise partner
+deb http://extras.ubuntu.com/ubuntu trusty main
+# deb-src http://extras.ubuntu.com/ubuntu precise main
