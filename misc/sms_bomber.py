@@ -17,7 +17,7 @@ mail_server = 'localhost'
 carrierGateways = {"att":"txt.att.net", "tmobile":"tmomail.net", "sprint":"pm.sprint.com", "virgin":"vmobl.com", 
 		"tracfone":"mmst5.tracfone.com", "metropcs":"mymetropcs.com", "cricket":"sms.mycricket.com",
 		"ptel":"ptel.com", "republic":"text.republicwireless.com", "suncom":"tms.suncom.com", "ting":"message.ting.com",
-		"uscc":"email.uscc.net",  "cingular":"cingularme.com", "cpsire":"cspire1.com", "verizon":"vtext.com"}
+		"uscc":"email.uscc.net",  "cingular":"cingularme.com", "cpsire":"cspire1.com", "verizon":"vzwpix.com"}
 
 #args
 parser = argparse.ArgumentParser(description="PoC SMS Bomber")
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 		message = None
 
 	#Start...
-	print "[+]Starting x%s SMS bomb of cell: %s" % (number, target)
+	print "[+]Starting x%s SMS bomb of cell: %s@%s" % (number, target, carrierGateways[carrier])
 	i = 0
 	while  (i < number):
 		#Load Message content
