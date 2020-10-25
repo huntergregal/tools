@@ -30,6 +30,7 @@ function getPageFetch(url) {
         headers: {
           "Referrer": "/profile"
         },
+	mode: "no-cors",
     }).then(resp => resp.text())
         .then(function(resp) {
             return unescape(encodeURIComponent(resp));
