@@ -31,6 +31,7 @@ function getPageFetch(url) {
           "Referrer": "/profile"
         },
 	mode: "no-cors",
+	credentials: "include",
     }).then(resp => resp.text())
         .then(function(resp) {
             return unescape(encodeURIComponent(resp));
@@ -42,6 +43,8 @@ function postPageFetch(url, data) {
 	fetch(url, {
         method: "POST",
         body: data,
+	mode: "no-cors",
+	credentials: "include",
         //body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json"
